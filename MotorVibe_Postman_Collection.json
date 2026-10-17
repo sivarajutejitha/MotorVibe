@@ -1,0 +1,461 @@
+{
+  "info": {
+    "name": "MotorVibe Industrial Telemetry & Health API",
+    "_postman_id": "c1f4d04-952d-4dda-b5eb-bbfd747a11f9",
+    "description": "Comprehensive REST API Collection for MotorVibe - Industry 4.0 Predictive Maintenance Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Sign Up / Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"College Student\",\n  \"email\": \"student@college.edu\",\n  \"password\": \"Password123!\",\n  \"confirm_password\": \"Password123!\",\n  \"organization\": \"Department of Web Development\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Login (Demo User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@motorvibe.io\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Senior Reliability Engineer\",\n  \"organization\": \"Apex Advanced Industrial Plant\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Motors Management",
+      "item": [
+        {
+          "name": "Get All Motors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/motors",
+              "host": ["{{baseUrl}}"],
+              "path": ["motors"]
+            }
+          }
+        },
+        {
+          "name": "Get Motor by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/motors/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["motors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Motor",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motor_name\": \"Ball Mill Drive Motor\",\n  \"equipment_code\": \"MTR-107\",\n  \"location\": \"Crushing Line 4\",\n  \"rated_power_kw\": 90.0,\n  \"vibration_warning_threshold\": 4.5,\n  \"vibration_critical_threshold\": 7.1,\n  \"temperature_warning_threshold\": 70.0,\n  \"temperature_critical_threshold\": 85.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/motors",
+              "host": ["{{baseUrl}}"],
+              "path": ["motors"]
+            }
+          }
+        },
+        {
+          "name": "Update Motor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"Primary Pumping Bay Line 1A\",\n  \"rated_power_kw\": 60.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/motors/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["motors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Motor",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/motors/7",
+              "host": ["{{baseUrl}}"],
+              "path": ["motors", "7"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sensors & Telemetry",
+      "item": [
+        {
+          "name": "Get All Sensors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sensors",
+              "host": ["{{baseUrl}}"],
+              "path": ["sensors"]
+            }
+          }
+        },
+        {
+          "name": "Get Motor Readings History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/readings/history?motor_id=1&range=24h&limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["readings", "history"],
+              "query": [
+                { "key": "motor_id", "value": "1" },
+                { "key": "range", "value": "24h" },
+                { "key": "limit", "value": "100" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Motor Live Reading",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/readings/live/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["readings", "live", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Motor Statistical Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/readings/stats/1?range=24h",
+              "host": ["{{baseUrl}}"],
+              "path": ["readings", "stats", "1"],
+              "query": [{ "key": "range", "value": "24h" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alerts & Diagnostics",
+      "item": [
+        {
+          "name": "Get Alerts (Active)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alerts?status=Active",
+              "host": ["{{baseUrl}}"],
+              "path": ["alerts"],
+              "query": [{ "key": "status", "value": "Active" }]
+            }
+          }
+        },
+        {
+          "name": "Acknowledge Alert",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"acknowledged_by\": \"Plant Engineer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alerts/1/acknowledge",
+              "host": ["{{baseUrl}}"],
+              "path": ["alerts", "1", "acknowledge"]
+            }
+          }
+        },
+        {
+          "name": "Resolve Alert",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolved_by\": \"Maintenance Tech\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alerts/1/resolve",
+              "host": ["{{baseUrl}}"],
+              "path": ["alerts", "1", "resolve"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance History",
+      "item": [
+        {
+          "name": "Get Maintenance Records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/maintenance",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance"]
+            }
+          }
+        },
+        {
+          "name": "Create Maintenance Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motor_id\": 1,\n  \"technician_name\": \"Arun Patel\",\n  \"maintenance_type\": \"Preventive Maintenance\",\n  \"description\": \"Routine quarterly bearing relubrication\",\n  \"work_performed\": \"Injected Mobil Polyrex EM synthetic grease\",\n  \"maintenance_date\": \"2026-10-17\",\n  \"status\": \"Completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/maintenance",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard KPIs & Fleet Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Get Analytics Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Get Analytics Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/trends?range=24h",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "trends"],
+              "query": [{ "key": "range", "value": "24h" }]
+            }
+          }
+        },
+        {
+          "name": "Get Activity Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/activity",
+              "host": ["{{baseUrl}}"],
+              "path": ["activity"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Simulator Testing & Faults",
+      "item": [
+        {
+          "name": "Get Simulator Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/simulator/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["simulator", "status"]
+            }
+          }
+        },
+        {
+          "name": "Inject Fault (Bearing Fault)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motor_id\": 1,\n  \"fault_type\": \"BEARING_FAULT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/simulator/inject-fault",
+              "host": ["{{baseUrl}}"],
+              "path": ["simulator", "inject-fault"]
+            }
+          }
+        },
+        {
+          "name": "Inject Fault (Normal Baseline)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motor_id\": 1,\n  \"fault_type\": \"NORMAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/simulator/inject-fault",
+              "host": ["{{baseUrl}}"],
+              "path": ["simulator", "inject-fault"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

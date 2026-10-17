@@ -1,0 +1,57 @@
+name: MotorVibe CI Workflow
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: motorvibe_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Root Dependencies
+        run: npm ci || npm install
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci || npm install
+
+      - name: Initialize PostgreSQL Database Schema & Seed
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgres://postgres:postgrespassword@localhost:5432/motorvibe_db
+        run: node scripts/initDb.js
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci || npm install
+
+      - name: Build Frontend Application with Vite
+        working-directory: ./frontend
+        run: npm run build
