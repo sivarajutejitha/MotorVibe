@@ -68,12 +68,60 @@ export function TopBar({ pageTitle, isSocketConnected = true, activeAlertCount =
           )}
         </Link>
 
-        {/* User Profile Info */}
-        <div className="user-profile-badge">
-          <div className="user-avatar">{userInitial}</div>
-          <div className="user-meta">
-            <span className="user-name">{user?.full_name || 'Plant Operator'}</span>
-            <span className="user-role">{user?.organization || 'Industrial Plant'}</span>
+        {/* User Profile Info - Prominently Displayed */}
+        <div 
+          className="user-profile-badge" 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '0.65rem', 
+            padding: '0.35rem 0.85rem', 
+            backgroundColor: '#f8fafc', 
+            borderRadius: 'var(--radius-md)', 
+            border: '1px solid var(--border-color)',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+          }}
+        >
+          <div 
+            className="user-avatar" 
+            style={{ 
+              width: '32px', 
+              height: '32px', 
+              borderRadius: '50%', 
+              backgroundColor: 'var(--blue-primary)', 
+              color: '#ffffff', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              fontWeight: 800, 
+              fontSize: '0.88rem' 
+            }}
+          >
+            {userInitial}
+          </div>
+          <div className="user-meta" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+            <span 
+              className="user-name" 
+              style={{ 
+                fontWeight: 800, 
+                fontSize: '0.88rem', 
+                color: 'var(--text-main)', 
+                letterSpacing: '-0.01em' 
+              }}
+            >
+              {user?.full_name || 'Plant Operator'}
+            </span>
+            <span 
+              className="user-role" 
+              style={{ 
+                fontSize: '0.72rem', 
+                color: 'var(--blue-primary)', 
+                fontWeight: 600, 
+                textTransform: 'uppercase' 
+              }}
+            >
+              {user?.role ? `${user.role} • ` : ''}{user?.organization || 'MotorVibe Demo Plant'}
+            </span>
           </div>
         </div>
 

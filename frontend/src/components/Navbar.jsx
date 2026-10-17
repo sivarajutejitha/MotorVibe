@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { Activity, LogIn, UserPlus, LayoutDashboard } from 'lucide-react';
 
 export function Navbar({ isSocketConnected = true }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
 
   return (
@@ -50,10 +50,15 @@ export function Navbar({ isSocketConnected = true }) {
         </div>
 
         {isAuthenticated ? (
-          <Link to="/dashboard" className="btn btn-primary btn-sm">
-            <LayoutDashboard size={15} />
-            View Dashboard
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: 600 }}>
+              Operator: <strong style={{ color: 'var(--blue-primary)' }}>{user?.full_name || 'Industrial Demo User'}</strong>
+            </span>
+            <Link to="/dashboard" className="btn btn-primary btn-sm">
+              <LayoutDashboard size={15} />
+              View Dashboard
+            </Link>
+          </div>
         ) : (
           <div style={{ display: 'flex', gap: '0.6rem' }}>
             <Link to="/login" className="btn btn-outline btn-sm">

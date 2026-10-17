@@ -11,10 +11,13 @@ import {
   Database,
   CheckCircle2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  User
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export function Sidebar({ activeAlertCount = 0, isCollapsed = false, onToggleCollapse }) {
+  const { user } = useAuth();
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: Activity },
     { path: '/motors', label: 'Motors', icon: Cpu },
@@ -71,9 +74,31 @@ export function Sidebar({ activeAlertCount = 0, isCollapsed = false, onToggleCol
 
       {!isCollapsed && (
         <div className="sidebar-footer">
+          {user && (
+            <div 
+              style={{ 
+                padding: '0.5rem 0.65rem', 
+                backgroundColor: '#f1f5f9', 
+                borderRadius: 'var(--radius-sm)', 
+                marginBottom: '0.65rem', 
+                border: '1px solid var(--border-color)' 
+              }}
+            >
+              <div style={{ fontSize: '0.68rem', color: 'var(--text-light)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+                Active Operator
+              </div>
+              <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--text-main)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {user.full_name || 'Plant Operator'}
+              </div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--blue-primary)', fontWeight: 600 }}>
+                {user.email}
+              </div>
+            </div>
+          )}
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--status-healthy)', fontSize: '0.78rem', marginBottom: '0.35rem' }}>
             <Database size={14} />
-            <span style={{ fontWeight: 600 }}>PostgreSQL Connected</span>
+            <span style={{ fontWeight: 600 }}>PostgreSQL Telemetry Live</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-light)', fontSize: '0.72rem' }}>
             <CheckCircle2 size={13} color="var(--blue-primary)" />

@@ -128,7 +128,8 @@ function generateReading(motorId) {
   );
 
   const spectrum = generateFrequencySpectrum(frequency_peak, vib_rms);
-  const runtime_hours = parseFloat((spec.runtime + (tickCount * 0.00028)).toFixed(2));
+  // Visibly increasing operational runtime hours: +0.005 per tick
+  const runtime_hours = parseFloat((spec.runtime + (tickCount * 0.005)).toFixed(3));
 
   const reading = {
     motor_id: Number(motorId),
@@ -196,9 +197,9 @@ function startSimulator(io, intervalMs = 1000) {
           io.to(`machine_${motorId}`).emit('machine_telemetry', reading);
         }
 
-        // Sampling & Storage Interval: Store in PostgreSQL every 10 ticks (10s)
-        // to avoid database bloating while maintaining rich historical trends
-        if (tickCount % 10 === 0) {
+        // Sampling & Storage Interval: Store in PostgreSQL continuously every 2 ticks (2 seconds)
+        // This ensures the dataset in PostgreSQL is actively and visibly growing in real time!
+        if (tickCount % 2 === 0) {
           query(
             `INSERT INTO sensor_readings (
               motor_id,
@@ -226,6 +227,9 @@ function startSimulator(io, intervalMs = 1000) {
           ).catch((e) => {
             // non-fatal telemetry persistence warning
           });
+
+          // Continuously update motor's updated_at timestamp in PostgreSQL
+          query('UPDATE motors SET updated_at = CURRENT_TIMESTAMP WHERE id = $1', [motorId]).catch(() => {});
         }
       } catch (err) {
         console.error(`[Simulator Error for Motor ${motorId}]:`, err.message);

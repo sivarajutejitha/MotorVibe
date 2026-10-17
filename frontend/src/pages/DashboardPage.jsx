@@ -4,6 +4,7 @@ import { MetricCard } from '../components/MetricCard';
 import { IsoSeverityBadge } from '../components/IsoSeverityBadge';
 import { MotorDetailsModal } from '../components/MotorDetailsModal';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import {
   ResponsiveContainer,
   LineChart,
@@ -53,6 +54,7 @@ export function DashboardPage() {
   const [selectedMotorForModal, setSelectedMotorForModal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [acknowledgingId, setAcknowledgingId] = useState(null);
+  const { user } = useAuth();
 
   const navigate = useNavigate();
 
@@ -122,11 +124,27 @@ export function DashboardPage() {
       {/* Page Header & Filters */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
-            Fleet Condition & Health Overview
-          </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-            Predictive condition monitoring for electric drive systems across the plant
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+              Fleet Condition & Health Overview
+            </h2>
+            <span 
+              className="badge badge-info" 
+              style={{ 
+                fontSize: '0.75rem', 
+                fontWeight: 700, 
+                backgroundColor: 'var(--blue-subtle)', 
+                color: 'var(--blue-primary)',
+                border: '1px solid var(--blue-border)',
+                padding: '0.2rem 0.6rem',
+                borderRadius: 'var(--radius-full)'
+              }}
+            >
+              Active Operator: {user?.full_name || 'Industrial Demo User'}
+            </span>
+          </div>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+            Welcome back, <strong style={{ color: 'var(--text-main)' }}>{user?.full_name || 'Industrial Demo User'}</strong> ({user?.email || 'demo@motorvibe.io'}) &bull; Predictive condition monitoring for electric drive systems across the plant
           </p>
         </div>
 
